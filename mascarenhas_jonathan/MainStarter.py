@@ -1,6 +1,8 @@
 import traceback
-
-serial_number = 1
+from RiverSystem import RiverSystem
+from RiverPart import Boat
+from RiverPart import Section
+from RiverPart import Lock
 
 class InputOutOfRangeError(Exception):
     def __init__(self):
@@ -16,8 +18,8 @@ def cleanInput(prompt):
 
 
 def main( ):
-    print("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜_X( 0)_〜〜〜〜〜〜〜〜〜\n" \
-           "〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜.......〜〜〜〜〜〜〜〜〜")
+    mySystem = RiverSystem()
+    print(mySystem)
 
     menu = "\n" \
            "1) Add Default Boat\n" \
@@ -41,20 +43,26 @@ def main( ):
 
             # add default box
             if choice == 1:
+                boat = Boat()
                 #add a default boat at the left end of the river
-                print("TODO")
+                mySystem.addDefaultBoat(boat)
+                print(mySystem)
 
             # update one time
             elif choice == 2:
-                print( "TODO" )
+                mySystem.updateOne()
+                print(mySystem)
 
             # update X number of times
             elif choice == 3:
-                print( "TODO" )
+                updateCount = int(cleanInput( "How many updates:> " ))
+                for i in range(updateCount):
+                    mySystem.updateOne()
+                    print(mySystem)
 
             # print out station details
             elif choice == 4:
-                print( "TODO" )
+                mySystem.getSectionDetails()
 
             # make a new box of any size
             elif choice == 5:
@@ -70,7 +78,8 @@ def main( ):
 
             # debug/check for D in SOLID in __str__
             elif choice == -1:
-                print( "TODO" )
+                mySystem.handleSOLID()
+
 
             elif choice == 0 or '0':
                 choice = 0
