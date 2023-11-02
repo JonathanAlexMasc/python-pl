@@ -4,20 +4,27 @@ from RiverPart import Boat
 from RiverPart import Section
 from RiverPart import Lock
 
+
 class InputOutOfRangeError(Exception):
     def __init__(self):
         super().__init__("Input an option in the range 0-7")
+
+
+class travelMethodError(Exception):
+    def __init__(self):
+        super().__init__("Input an option in the range 1-2")
+
 
 def cleanInput(prompt):
     result = input(prompt)
     # strips out blank lines in input
     while result == '':
-        result = input( )
+        result = input()
 
     return result
 
 
-def main( ):
+def main():
     mySystem = RiverSystem()
     print(mySystem)
 
@@ -34,17 +41,20 @@ def main( ):
     choice = -1
     while choice != 0:
         try:
-            print( menu )
-            choice = int(cleanInput( "Choice:> " ))
+            print(menu)
+            choice = int(cleanInput("Choice:> "))
 
-            #out of range
+            # out of range
             if (choice < -1 or choice > 7):
                 raise InputOutOfRangeError()
+
+            if choice is None:
+                break
 
             # add default box
             if choice == 1:
                 boat = Boat()
-                #add a default boat at the left end of the river
+                # add a default boat at the left end of the river
                 mySystem.addDefaultBoat(boat)
                 print(mySystem)
 
@@ -55,7 +65,7 @@ def main( ):
 
             # update X number of times
             elif choice == 3:
-                updateCount = int(cleanInput( "How many updates:> " ))
+                updateCount = int(cleanInput("How many updates:> "))
                 for i in range(updateCount):
                     mySystem.updateOne()
                     print(mySystem)
@@ -66,22 +76,28 @@ def main( ):
 
             # make a new box of any size
             elif choice == 5:
-                print( "TODO" )
+                enginePower = int(cleanInput("What engine power:> "))
+                travelMethod = int(cleanInput("What travel method. (1) Steady or (2) Max :> "))
 
+                if (travelMethod < 1 or travelMethod > 2):
+                    raise travelMethodError()
+
+                mySystem.addCustomBoat(enginePower, travelMethod)
+                print(mySystem)
             # make new system
             elif choice == 6:
-                print( "TODO" )
+                mySystem.makeTesterRiver()
+                print(mySystem)
 
             # make new system
             elif choice == 7:
-                print( "TODO" )
+                print("TODO")
 
             # debug/check for D in SOLID in __str__
             elif choice == -1:
                 mySystem.handleSOLID()
 
-
-            elif choice == 0 or '0':
+            elif choice == 0 or '0' or None:
                 choice = 0
             else:
                 raise Exception("Please ")
@@ -89,6 +105,12 @@ def main( ):
             print("Please, input a positive integer")
         except InputOutOfRangeError as e:
             print(e)
+        except travelMethodError as e:
+            print(e)
+            print(mySystem)
+        # except:
+        # print(traceback.format_exc())
+
 
 if __name__ == '__main__':
-    main( )
+    main()
